@@ -13,7 +13,8 @@ type Bookmark = {
 };
 
 export default function HomePage() {
-  const { supabase, session, loading } = useSupabase();
+  const { supabase, session, loading, signupCompleted, completeSignup } =
+    useSupabase();
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [url, setUrl] = useState("");
   const [title, setTitle] = useState("");
@@ -132,6 +133,22 @@ export default function HomePage() {
         ) : !session ? (
           <div className="rounded-lg border border-dashed border-slate-700 bg-slate-900/60 p-6 text-center text-sm text-slate-400">
             Sign in with Google to start managing your bookmarks.
+          </div>
+        ) : !signupCompleted ? (
+          <div className="rounded-lg border border-slate-700 bg-slate-900/60 p-6 text-center">
+            <h2 className="mb-3 text-base font-medium text-slate-200">
+              Welcome, new user!
+            </h2>
+            <p className="mb-4 text-sm text-slate-400">
+              Complete your sign up to start saving and managing bookmarks.
+            </p>
+            <button
+              type="button"
+              onClick={() => void completeSignup()}
+              className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-medium text-white shadow hover:bg-indigo-400"
+            >
+              Complete sign up
+            </button>
           </div>
         ) : (
           <>

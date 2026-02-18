@@ -14,6 +14,8 @@ type SupabaseContextValue = {
   supabase: ReturnType<typeof getSupabaseClient>;
   session: Session | null;
   loading: boolean;
+  signupCompleted: boolean;
+  completeSignup: () => Promise<void>;
 };
 
 const SupabaseContext = createContext<SupabaseContextValue | undefined>(
@@ -24,6 +26,16 @@ export function SupabaseProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const supabase = getSupabaseClient();
+
+  const signupCompleted = Boolean(
+    session?.user?.user_metadata?.signup_completed
+  );
+
+  const completeSignup = async () => {
+    await supabase.auth.updateUser({
+      data: { signup_completed: true }
+    });
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -54,7 +66,9 @@ export function SupabaseProvider({ children }: { children: ReactNode }) {
   }, [supabase]);
 
   return (
-    <SupabaseContext.Provider value={{ supabase, session, loading }}>
+    <SupabaseContext.Provider
+      value={{ supabase, session, loading, signupCompleted, completeSignup }}
+    >
       {children}
     </SupabaseContext.Provider>
   );

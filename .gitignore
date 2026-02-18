@@ -1,0 +1,15 @@
+# dependencies
+node_modules
+
+# environment variables (CRITICAL)
+.env.local
+.env
+
+# next build
+.next
+out
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
